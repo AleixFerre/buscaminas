@@ -2,9 +2,12 @@
   <button
     *ngFor="let item of row; let j = index"
     class="column"
+    [ngClass]="{
+      clicked: clicked[i][j]
+    }"
     (click)="clickPos(i, j)"
   >
-    <div *ngIf="canShow[i][j]">
+    <div *ngIf="clicked[i][j]">
       <img
         *ngIf="item === -1; else number"
         src="assets/mine.png"
@@ -12,7 +15,7 @@
         alt="mine image"
       />
       <ng-template #number>
-        <span>{{ item }}</span>
+        <span *ngIf="item !== 0">{{ item }}</span>
       </ng-template>
     </div>
   </button>
