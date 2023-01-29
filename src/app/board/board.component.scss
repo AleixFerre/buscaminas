@@ -1,0 +1,20 @@
+.row {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  max-width: 30rem;
+}
+
+.column {
+  display: flex;
+  border: 1px solid brown;
+  height: 3rem;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.image {
+  width: 2rem;
+  aspect-ratio: 1;
+}

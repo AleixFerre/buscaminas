@@ -1,0 +1,19 @@
+<div *ngFor="let row of matrix; let i = index" class="row">
+  <button
+    *ngFor="let item of row; let j = index"
+    class="column"
+    (click)="clickPos(i, j)"
+  >
+    <div *ngIf="canShow[i][j]">
+      <img
+        *ngIf="item === -1; else number"
+        src="assets/mine.png"
+        class="image"
+        alt="mine image"
+      />
+      <ng-template #number>
+        <span>{{ item }}</span>
+      </ng-template>
+    </div>
+  </button>
+</div>
