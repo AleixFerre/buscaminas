@@ -14,6 +14,7 @@ export class BoardComponent implements OnInit {
   flag: boolean[][] = [];
   status: GameStatus = GameStatus.Playing;
   isFirstTurn = true;
+  bombsCoords: Coords[] = [];
 
   GameStatus = GameStatus;
 
@@ -39,10 +40,14 @@ export class BoardComponent implements OnInit {
   }
 
   private placeBombs(avoidX: number, avoidY: number) {
-    const bombsCoords: Coords[] = [];
+    this.bombsCoords = [];
     for (let i: number = 0; i < MATRIX_SIZE; i++) {
-      let coords = this.getRandomPositionAvoiding(avoidX, avoidY, bombsCoords);
-      bombsCoords.push(coords);
+      const coords = this.getRandomPositionAvoiding(
+        avoidX,
+        avoidY,
+        this.bombsCoords
+      );
+      this.bombsCoords.push(coords);
       this.matrix[coords.x][coords.y] = -1;
     }
   }
@@ -113,11 +118,26 @@ export class BoardComponent implements OnInit {
       this.isFirstTurn = false;
     }
 
+    if (this.matrix[x][y] === -1) {
+      this.showBombs();
+      this.gameOver();
+      return;
+    }
+
     this.clickPosRecursive(x, y);
 
     if (this.checkWin()) {
+      this.showBombs();
       this.status = GameStatus.Win;
     }
+  }
+
+  private showBombs() {
+    this.bombsCoords.forEach((coords) => {
+      if (this.matrix[coords.x][coords.y] === -1) {
+        this.clicked[coords.x][coords.y] = true;
+      }
+    });
   }
 
   public clickPosRecursive(x: number, y: number) {
@@ -127,10 +147,7 @@ export class BoardComponent implements OnInit {
 
     this.clicked[x][y] = true;
 
-    if (this.matrix[x][y] === -1) {
-      this.gameOver();
-      return;
-    }
+
 
     if (this.matrix[x][y] !== 0) {
       return;

@@ -1,7 +1,9 @@
+$rows: 10;
+
 .row {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  max-width: 30rem;
+  grid-template-columns: repeat($rows, 1fr);
+  max-width: $rows * 3rem;
 }
 
 .column {
