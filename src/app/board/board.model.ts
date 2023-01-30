@@ -1,4 +1,5 @@
 export enum GameStatus {
   Playing,
-  GameOver
+  GameOver,
+  Win
 }

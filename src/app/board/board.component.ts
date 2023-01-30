@@ -76,8 +76,17 @@ export class BoardComponent implements OnInit {
     return limits.map((n) => Math.min(Math.max(n, 0), MATRIX_SIZE - 1));
   }
 
+  public toggleFlag(x: number, y: number, event: Event) {
+    event.preventDefault();
+    if (this.status !== GameStatus.Playing) {
+      return;
+    }
+
+    this.flag[x][y] = !this.flag[x][y];
+  }
+
   public clickPos(x: number, y: number) {
-    if (this.status === GameStatus.GameOver) {
+    if (this.status !== GameStatus.Playing) {
       return;
     }
 
@@ -86,11 +95,10 @@ export class BoardComponent implements OnInit {
     }
 
     this.clickPosRecursive(x, y);
-  }
 
-  public toggleFlag(x: number, y: number, event: Event) {
-    event.preventDefault();
-    this.flag[x][y] = !this.flag[x][y];
+    if (this.checkWin()) {
+      this.status = GameStatus.Win;
+    }
   }
 
   public clickPosRecursive(x: number, y: number) {
@@ -128,5 +136,16 @@ export class BoardComponent implements OnInit {
     this.flag = [];
     this.startGame();
     this.status = GameStatus.Playing;
+  }
+
+  private checkWin(): boolean {
+    for (let i: number = 0; i < MATRIX_SIZE; i++) {
+      for (let j: number = 0; j < MATRIX_SIZE; j++) {
+        if (this.matrix[i][j] !== -1 && !this.clicked[i][j]) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 }

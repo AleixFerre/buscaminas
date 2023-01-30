@@ -34,3 +34,8 @@
   <div class="title">GAME OVER</div>
   <button (click)="restart()" class="button">Restart</button>
 </div>
+
+<div *ngIf="status === GameStatus.Win" class="game-over">
+  <div class="title">You won!</div>
+  <button (click)="restart()" class="button">Restart</button>
+</div>
