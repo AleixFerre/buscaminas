@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { isFormArray } from '@angular/forms';
 import { GameStatus } from './board.model';
 
 const MATRIX_SIZE = 10;
@@ -13,6 +14,7 @@ export class BoardComponent implements OnInit {
   clicked: boolean[][] = [];
   flag: boolean[][] = [];
   status: GameStatus = GameStatus.Playing;
+  isFirstTurn = true;
 
   GameStatus = GameStatus;
 
@@ -22,8 +24,6 @@ export class BoardComponent implements OnInit {
 
   private startGame() {
     this.createMatrix();
-    this.placeBombs();
-    this.calculateNumbers();
   }
 
   private createMatrix() {
@@ -39,10 +39,15 @@ export class BoardComponent implements OnInit {
     }
   }
 
-  private placeBombs() {
+  private placeBombs(avoidX: number, avoidY: number) {
     for (let i: number = 0; i < MATRIX_SIZE; i++) {
       let x = Math.floor(Math.random() * MATRIX_SIZE);
       let y = Math.floor(Math.random() * MATRIX_SIZE);
+
+      while (x === avoidX && y === avoidY) {
+        x = Math.floor(Math.random() * MATRIX_SIZE);
+        y = Math.floor(Math.random() * MATRIX_SIZE);
+      }
       this.matrix[x][y] = -1;
     }
   }
@@ -94,6 +99,12 @@ export class BoardComponent implements OnInit {
       return;
     }
 
+    if (this.isFirstTurn) {
+      this.placeBombs(x, y);
+      this.calculateNumbers();
+      this.isFirstTurn = false;
+    }
+
     this.clickPosRecursive(x, y);
 
     if (this.checkWin()) {
@@ -135,6 +146,7 @@ export class BoardComponent implements OnInit {
     this.clicked = [];
     this.flag = [];
     this.startGame();
+    this.isFirstTurn = true;
     this.status = GameStatus.Playing;
   }
 
