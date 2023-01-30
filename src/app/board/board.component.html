@@ -6,8 +6,9 @@
       clicked: clicked[i][j]
     }"
     (click)="clickPos(i, j)"
+    (contextmenu)="toggleFlag(i,j, $event)"
   >
-    <div *ngIf="clicked[i][j]">
+    <div *ngIf="clicked[i][j]; else notClicked">
       <img
         *ngIf="item === -1; else number"
         src="assets/mine.png"
@@ -18,6 +19,14 @@
         <span *ngIf="item !== 0">{{ item }}</span>
       </ng-template>
     </div>
+    <ng-template #notClicked>
+      <img
+        *ngIf="flag[i][j]"
+        src="assets/flag.png"
+        class="image"
+        alt="flag image"
+      />
+    </ng-template>
   </button>
 </div>
 

@@ -11,9 +11,10 @@ const MATRIX_SIZE = 10;
 export class BoardComponent implements OnInit {
   matrix: number[][] = [];
   clicked: boolean[][] = [];
+  flag: boolean[][] = [];
+  status: GameStatus = GameStatus.Playing;
 
   GameStatus = GameStatus;
-  status: GameStatus = GameStatus.Playing;
 
   ngOnInit(): void {
     this.startGame();
@@ -29,9 +30,11 @@ export class BoardComponent implements OnInit {
     for (let i: number = 0; i < MATRIX_SIZE; i++) {
       this.matrix[i] = [];
       this.clicked[i] = [];
+      this.flag[i] = [];
       for (let j: number = 0; j < MATRIX_SIZE; j++) {
         this.matrix[i][j] = 0;
         this.clicked[i][j] = false;
+        this.flag[i][j] = false;
       }
     }
   }
@@ -78,6 +81,19 @@ export class BoardComponent implements OnInit {
       return;
     }
 
+    if (this.flag[x][y]) {
+      return;
+    }
+
+    this.clickPosRecursive(x, y);
+  }
+
+  public toggleFlag(x: number, y: number, event: Event) {
+    event.preventDefault();
+    this.flag[x][y] = !this.flag[x][y];
+  }
+
+  public clickPosRecursive(x: number, y: number) {
     if (this.clicked[x][y]) {
       return;
     }
@@ -97,7 +113,7 @@ export class BoardComponent implements OnInit {
 
     for (let i = startX; i <= endX; i++) {
       for (let j = startY; j <= endY; j++) {
-        this.clickPos(i, j);
+        this.clickPosRecursive(i, j);
       }
     }
   }
@@ -109,6 +125,7 @@ export class BoardComponent implements OnInit {
   public restart() {
     this.matrix = [];
     this.clicked = [];
+    this.flag = [];
     this.startGame();
     this.status = GameStatus.Playing;
   }

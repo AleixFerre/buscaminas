@@ -2,4 +2,5 @@
 
 - Funcionalitat de gameplay
   - Que no puguis clicar una bomba la primera vegada
-  - Que puguis marcar bomba (bandera) amb el botó dret
+  - Poder guanyar la partida
+    - Si descobreixes totes les caselles que no son bomba
