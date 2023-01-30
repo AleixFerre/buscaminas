@@ -1,5 +1,10 @@
 export enum GameStatus {
   Playing,
   GameOver,
-  Win
+  Win,
+}
+
+export interface Coords {
+  x: number;
+  y: number;
 }

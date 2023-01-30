@@ -6,7 +6,7 @@
       clicked: clicked[i][j]
     }"
     (click)="clickPos(i, j)"
-    (contextmenu)="toggleFlag(i,j, $event)"
+    (contextmenu)="toggleFlag(i, j, $event)"
   >
     <div *ngIf="clicked[i][j]; else notClicked">
       <img
@@ -30,12 +30,12 @@
   </button>
 </div>
 
-<div *ngIf="status === GameStatus.GameOver" class="game-over">
+<div *ngIf="status === GameStatus.GameOver" class="info-panel">
   <div class="title">GAME OVER</div>
   <button (click)="restart()" class="button">Restart</button>
 </div>
 
-<div *ngIf="status === GameStatus.Win" class="game-over">
+<div *ngIf="status === GameStatus.Win" class="info-panel">
   <div class="title">You won!</div>
   <button (click)="restart()" class="button">Restart</button>
 </div>

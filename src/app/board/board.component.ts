@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { isFormArray } from '@angular/forms';
-import { GameStatus } from './board.model';
+import { Coords, GameStatus } from './board.model';
 
 const MATRIX_SIZE = 10;
 
@@ -40,16 +39,25 @@ export class BoardComponent implements OnInit {
   }
 
   private placeBombs(avoidX: number, avoidY: number) {
+    const bombsCoords: Coords[] = [];
     for (let i: number = 0; i < MATRIX_SIZE; i++) {
-      let x = Math.floor(Math.random() * MATRIX_SIZE);
-      let y = Math.floor(Math.random() * MATRIX_SIZE);
-
-      while (x === avoidX && y === avoidY) {
-        x = Math.floor(Math.random() * MATRIX_SIZE);
-        y = Math.floor(Math.random() * MATRIX_SIZE);
-      }
-      this.matrix[x][y] = -1;
+      let coords = this.getRandomPositionAvoiding(avoidX, avoidY, bombsCoords);
+      bombsCoords.push(coords);
+      this.matrix[coords.x][coords.y] = -1;
     }
+  }
+
+  private getRandomPositionAvoiding(
+    avoidX: number,
+    avoidY: number,
+    currentBombs: Coords[]
+  ): Coords {
+    let [x, y] = [-1, -1];
+    do {
+      x = Math.floor(Math.random() * MATRIX_SIZE);
+      y = Math.floor(Math.random() * MATRIX_SIZE);
+    } while ((x === avoidX && y === avoidY) || currentBombs.includes({ x, y }));
+    return { x, y };
   }
 
   private calculateNumbers() {
