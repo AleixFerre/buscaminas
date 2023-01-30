@@ -20,3 +20,8 @@
     </div>
   </button>
 </div>
+
+<div *ngIf="status === GameStatus.GameOver" class="game-over">
+  <div class="title">GAME OVER</div>
+  <button (click)="restart()" class="button">Restart</button>
+</div>

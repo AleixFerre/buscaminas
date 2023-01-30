@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GameStatus } from './board.model';
 
 const MATRIX_SIZE = 10;
 
@@ -11,7 +12,14 @@ export class BoardComponent implements OnInit {
   matrix: number[][] = [];
   clicked: boolean[][] = [];
 
+  GameStatus = GameStatus;
+  status: GameStatus = GameStatus.Playing;
+
   ngOnInit(): void {
+    this.startGame();
+  }
+
+  private startGame() {
     this.createMatrix();
     this.placeBombs();
     this.calculateNumbers();
@@ -66,12 +74,20 @@ export class BoardComponent implements OnInit {
   }
 
   public clickPos(x: number, y: number) {
+    if (this.status === GameStatus.GameOver) {
+      return;
+    }
+
     if (this.clicked[x][y]) {
       return;
     }
 
     this.clicked[x][y] = true;
 
+    if (this.matrix[x][y] === -1) {
+      this.gameOver();
+      return;
+    }
 
     if (this.matrix[x][y] !== 0) {
       return;
@@ -84,5 +100,16 @@ export class BoardComponent implements OnInit {
         this.clickPos(i, j);
       }
     }
+  }
+
+  private gameOver() {
+    this.status = GameStatus.GameOver;
+  }
+
+  public restart() {
+    this.matrix = [];
+    this.clicked = [];
+    this.startGame();
+    this.status = GameStatus.Playing;
   }
 }
