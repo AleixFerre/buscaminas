@@ -1,7 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Coords, GameStatus } from './board.model';
-
-const MATRIX_SIZE = 10;
 
 @Component({
   selector: 'app-board',
@@ -9,6 +7,8 @@ const MATRIX_SIZE = 10;
   styleUrls: ['./board.component.scss'],
 })
 export class BoardComponent implements OnInit {
+  @Input() boardSize!: number;
+
   matrix: number[][] = [];
   clicked: boolean[][] = [];
   flag: boolean[][] = [];
@@ -27,11 +27,11 @@ export class BoardComponent implements OnInit {
   }
 
   private createMatrix() {
-    for (let i: number = 0; i < MATRIX_SIZE; i++) {
+    for (let i: number = 0; i < this.boardSize; i++) {
       this.matrix[i] = [];
       this.clicked[i] = [];
       this.flag[i] = [];
-      for (let j: number = 0; j < MATRIX_SIZE; j++) {
+      for (let j: number = 0; j < this.boardSize; j++) {
         this.matrix[i][j] = 0;
         this.clicked[i][j] = false;
         this.flag[i][j] = false;
@@ -41,7 +41,7 @@ export class BoardComponent implements OnInit {
 
   private placeBombs(avoidX: number, avoidY: number) {
     this.bombsCoords = [];
-    for (let i: number = 0; i < MATRIX_SIZE; i++) {
+    for (let i: number = 0; i < this.boardSize; i++) {
       const coords = this.getRandomPositionAvoiding(
         avoidX,
         avoidY,
@@ -59,15 +59,15 @@ export class BoardComponent implements OnInit {
   ): Coords {
     let [x, y] = [-1, -1];
     do {
-      x = Math.floor(Math.random() * MATRIX_SIZE);
-      y = Math.floor(Math.random() * MATRIX_SIZE);
+      x = Math.floor(Math.random() * this.boardSize);
+      y = Math.floor(Math.random() * this.boardSize);
     } while ((x === avoidX && y === avoidY) || currentBombs.includes({ x, y }));
     return { x, y };
   }
 
   private calculateNumbers() {
-    for (let i: number = 0; i < MATRIX_SIZE; i++) {
-      for (let j: number = 0; j < MATRIX_SIZE; j++) {
+    for (let i: number = 0; i < this.boardSize; i++) {
+      for (let j: number = 0; j < this.boardSize; j++) {
         if (this.matrix[i][j] !== -1) {
           this.matrix[i][j] = this.calculateCircundant(i, j);
         }
@@ -91,7 +91,7 @@ export class BoardComponent implements OnInit {
 
   private calculateLimits(x: number, y: number) {
     const limits = [x - 1, x + 1, y - 1, y + 1];
-    return limits.map((n) => Math.min(Math.max(n, 0), MATRIX_SIZE - 1));
+    return limits.map((n) => Math.min(Math.max(n, 0), this.boardSize - 1));
   }
 
   public toggleFlag(x: number, y: number, event: Event) {
@@ -176,8 +176,8 @@ export class BoardComponent implements OnInit {
   }
 
   private checkWin(): boolean {
-    for (let i: number = 0; i < MATRIX_SIZE; i++) {
-      for (let j: number = 0; j < MATRIX_SIZE; j++) {
+    for (let i: number = 0; i < this.boardSize; i++) {
+      for (let j: number = 0; j < this.boardSize; j++) {
         if (this.matrix[i][j] !== -1 && !this.clicked[i][j]) {
           return false;
         }

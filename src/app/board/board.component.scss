@@ -1,8 +1,5 @@
-$rows: 10;
-
 .row {
   display: grid;
-  grid-template-columns: repeat($rows, 1fr);
 }
 
 .column {
