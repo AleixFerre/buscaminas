@@ -16,7 +16,13 @@
         alt="mine image"
       />
       <ng-template #number>
-        <span *ngIf="item !== 0">{{ item }}</span>
+        <span *ngIf="item !== 0" [ngClass]="{
+          one: item === 1,
+          two: item === 2,
+          three: item === 3,
+          four: item === 4,
+          five: item === 5
+        }">{{ item }}</span>
       </ng-template>
     </div>
     <ng-template #notClicked>
